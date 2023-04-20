@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+}
+
+h1 {
+    letter-spacing: 1vmin;
+    margin-top: -.8vmin;
+    margin-bottom: -1vmin;
+}
+
+#game-box {
+    width: 81vmin;
+    height: 81vmin;
+    border: .5vmin solid lightcoral;
+    display: grid;
+    grid-template-columns: repeat(3, 27vmin);
+    grid-template-rows: repeat(3, 27vmin);    
+    
+}
+
+.square {
+    border: .5px solid blue;
+    border-radius: 5%;
+}
+
+button {
+    margin-top: -1vmin;
+}
