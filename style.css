@@ -32,8 +32,14 @@ h1 {
 .square {
     border: .5px solid blue;
     border-radius: 5%;
+    font-size: 8rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button {
     margin-top: -1vmin;
+    margin-bottom: 1vmin;
 }
