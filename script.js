@@ -43,7 +43,7 @@ function renderGrid() {
   grid.forEach((rowArr, rowIdx) => {
     rowArr.forEach((col, colIdx) => {
       //dynamically select id to select our div with their id
-      const boxId = `c${rowIdx}r${colIdx}`;
+      const boxId = `r${rowIdx}c${colIdx}`;
       const box = document.querySelector(`#${boxId}`);
       box.textContent = MARKS[col]["marker"];
       box.style.color = MARKS[col]["color"];
@@ -88,39 +88,41 @@ function markGrid(event) {
   render();
 }
 
-//TODO: create and layout winning conditions
+//This function returns 1 / -1 / null
 function checkForWinner(row, col) {
   return checkHorizontalWin(row, col);
 }
 
 //TODO: prevent from going out of the grid, adjacent grids are the same player's
-
+//! REDO check functions
 function checkHorizontalWin(row, col) {
   //sum === 3 means win
+  const left = checkMarkedLeft(row, col);
+  const right = checkedMarkedRight(row, col);
+
+  return left + right === 3 ? turn : null;
+}
+
+function checkedMarkedRight(row, col) {
   let sumRight = 0;
   //while we are within the box
   //and the box to our right is the same marker, increment sum and col
-  while (grid[row][col] !== undefined && grid[row][col] === turn) {
+  while (grid[row][col] !== undefined && grid[row][col + 1] === turn) {
     sumRight++;
     col++;
-
-    if (sumRight === 3) {
-      winner = turn;
-    }
-    return winner;
   }
-
-  //check adjacent boxes to the left
-  let sumLeft = 0;
-  while (grid[row][col] !== undefined && grid[row][col === turn]) {
-    sumLeft++;
-    col--;
-
-    if (sumLeft === 3) {
-      winner = turn;
-    }
-    return winner;
-  }
+  console.log(`Right: ${sumRight}`); //! How come when I increment col it moves left
+  return sumRight;
 }
 
-// grid[r][c] if c + 1 === turn, add sum then increment, then check agagain
+function checkMarkedLeft(row, col) {
+  let sumLeft = 0;
+  while (grid[row][col] !== undefined && grid[row][col - 1] === turn) {
+    sumLeft++;
+    col--;
+  }
+  console.log(`Left: ${sumLeft}`); //! How come when I increment col it moves right
+  return sumLeft;
+}
+
+// grid[r][c] if c + 1 === turn, add sum then increment, then check again
