@@ -14,11 +14,14 @@ let grid;
 /*----- cached elements  -----*/
 const messageEl = document.querySelector("h4");
 const playBtn = document.querySelector("button");
+const gridEls = [...document.querySelectorAll(".square")];
+console.log(gridEls);
 /*----- event listeners -----*/
+document.querySelector("#game-box").addEventListener("click", markGrid);
+playBtn.addEventListener("click", init);
 
 /*----- functions -----*/
 init();
-
 function init() {
   turn = 1;
   winner = null;
@@ -26,7 +29,7 @@ function init() {
   grid = [
     [1, -1, 0],
     [0, 0, 0],
-    [0, -1, 1],
+    [0, 0, 0],
   ];
 
   render();
@@ -41,7 +44,7 @@ function render() {
 function renderGrid() {
   grid.forEach((rowArr, rowIdx) => {
     rowArr.forEach((col, colIdx) => {
-      //dynamically generates id to select our div with their id
+      //dynamically select id to select our div with their id
       const boxId = `c${rowIdx}r${colIdx}`;
       const box = document.querySelector(`#${boxId}`);
       box.textContent = MARKS[col]["marker"];
@@ -58,7 +61,7 @@ function renderMessage() {
   } else if (winner) {
     messageEl.innerHTML = `Winner: <span style="color:${MARKS[turn]["color"]}"> PLAYER ${MARKS[turn]["marker"]}</span>`;
   } else {
-    messageEl.innerText = `Player ${MARKS[turn]}'s is thinking`;
+    messageEl.innerText = `Player ${MARKS[turn]["marker"]} is thinking`;
   }
 }
 
@@ -70,4 +73,23 @@ function renderControl() {
 }
 
 //TODO: create APP's logic (clicking div)
+function markGrid(event) {
+  //select the event target, then modify grid accordingly
+  const clickedEl = event.target;
+  //make sure clicked element IS NOT the parent div
+  if (!clickedEl.classList.contains("square")) return;
+  const row = clickedEl.getAttribute("data-row");
+  const col = clickedEl.getAttribute("data-col");
+
+  grid[row][col] = turn;
+  console.log(grid);
+  //check if there's a winner
+  //return if winner
+  if (winner) return;
+  //else toggle the turn
+  turn *= -1;
+  //render changes
+  render();
+}
+
 //TODO: create and layout winning conditions
