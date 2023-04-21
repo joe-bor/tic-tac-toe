@@ -3,7 +3,6 @@ const MARKS = {
   0: "",
   1: { marker: "🥶", color: "red" },
   "-1": { marker: "🥵", color: "purple" },
-  //TODO: turn value to an object, to add corresponding color
 };
 
 /*----- state variables -----*/
@@ -15,7 +14,7 @@ let grid;
 const messageEl = document.querySelector("h4");
 const playBtn = document.querySelector("button");
 const gridEls = [...document.querySelectorAll(".square")];
-console.log(gridEls);
+
 /*----- event listeners -----*/
 document.querySelector("#game-box").addEventListener("click", markGrid);
 playBtn.addEventListener("click", init);
@@ -25,16 +24,15 @@ init();
 function init() {
   turn = 1;
   winner = null;
-  //TODO: Make sure to reset grid later after tests
   grid = [
-    [1, -1, 0],
+    [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0],
   ];
 
   render();
 }
-//TODO: merge the render functions
+
 function render() {
   renderGrid();
   renderMessage();
@@ -72,7 +70,6 @@ function renderControl() {
   //prevent re-click of div? add className?
 }
 
-//TODO: create APP's logic (clicking div)
 function markGrid(event) {
   //select the event target, then modify grid accordingly
   const clickedEl = event.target;
@@ -82,10 +79,9 @@ function markGrid(event) {
   const col = clickedEl.getAttribute("data-col");
 
   grid[row][col] = turn;
-  console.log(grid);
-  //check if there's a winner
-  //return if winner
-  if (winner) return;
+
+  //update winner
+  winner = checkForWinner(row, col);
   //else toggle the turn
   turn *= -1;
   //render changes
@@ -93,3 +89,38 @@ function markGrid(event) {
 }
 
 //TODO: create and layout winning conditions
+function checkForWinner(row, col) {
+  return checkHorizontalWin(row, col);
+}
+
+//TODO: prevent from going out of the grid, adjacent grids are the same player's
+
+function checkHorizontalWin(row, col) {
+  //sum === 3 means win
+  let sumRight = 0;
+  //while we are within the box
+  //and the box to our right is the same marker, increment sum and col
+  while (grid[row][col] !== undefined && grid[row][col] === turn) {
+    sumRight++;
+    col++;
+
+    if (sumRight === 3) {
+      winner = turn;
+    }
+    return winner;
+  }
+
+  //check adjacent boxes to the left
+  let sumLeft = 0;
+  while (grid[row][col] !== undefined && grid[row][col === turn]) {
+    sumLeft++;
+    col--;
+
+    if (sumLeft === 3) {
+      winner = turn;
+    }
+    return winner;
+  }
+}
+
+// grid[r][c] if c + 1 === turn, add sum then increment, then check agagain
